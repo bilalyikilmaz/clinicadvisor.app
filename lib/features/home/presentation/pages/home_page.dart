@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
   List<TreatmentModel> _trendingTreatments = [];
   List<TreatmentModel> _discountedTreatments = [];
   List<ClinicModel> _popularClinics = [];
-  final isGuest = _userService.isGuest;
 
   @override
   void initState() {
@@ -80,6 +79,7 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final currentUser = _userService.currentUser;
+    final isGuest = _userService.isGuest;
 
     return Scaffold(
       appBar: AppBar(
