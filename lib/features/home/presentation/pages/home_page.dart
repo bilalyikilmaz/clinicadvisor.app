@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/enums/user_role.dart';
 import '../../../../core/models/user_model.dart';
 import '../../../../core/models/treatment_model.dart';
@@ -8,6 +9,7 @@ import '../../../../core/services/treatment_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../admin/presentation/pages/admin_dashboard.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../core/utils/auth_guard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   List<TreatmentModel> _trendingTreatments = [];
   List<TreatmentModel> _discountedTreatments = [];
   List<ClinicModel> _popularClinics = [];
+  final isGuest = _userService.isGuest;
 
   @override
   void initState() {
@@ -96,61 +99,62 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: [
-          // Demo Role Switcher
-          PopupMenuButton<UserRole>(
-            icon: Icon(Icons.person_outline),
-            onSelected: (UserRole role) {
-              _userService.setCurrentUserRole(role);
-              setState(() {});
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: UserRole.patient,
-                child: Row(
-                  children: [
-                    Icon(Icons.person, color: AppColors.accent),
-                    const SizedBox(width: 8),
-                    Text('Hasta'),
-                  ],
-                ),
+          // Guest kullanıcı için giriş/kayıt butonları
+          if (isGuest) ...[
+            TextButton(
+              onPressed: () => context.go('/login'),
+              child: const Text(
+                'Giriş Yap',
+                style: TextStyle(color: Colors.white),
               ),
-              PopupMenuItem(
-                value: UserRole.doctor,
-                child: Row(
-                  children: [
-                    Icon(Icons.medical_services, color: AppColors.primary),
-                    const SizedBox(width: 8),
-                    Text('Doktor'),
-                  ],
-                ),
+            ),
+            const SizedBox(width: 8),
+            OutlinedButton(
+              onPressed: () => context.go('/register'),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Colors.white),
+                foregroundColor: Colors.white,
               ),
-              PopupMenuItem(
-                value: UserRole.clinicAdmin,
-                child: Row(
-                  children: [
-                    Icon(Icons.business, color: AppColors.secondary),
-                    const SizedBox(width: 8),
-                    Text('Klinik Yöneticisi'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: UserRole.admin,
-                child: Row(
-                  children: [
-                    Icon(Icons.admin_panel_settings, color: Colors.red),
-                    const SizedBox(width: 8),
-                    Text('System Admin'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _initializeData,
-            tooltip: 'Verileri Yenile',
-          ),
+              child: const Text('Kayıt Ol'),
+            ),
+          ]
+          // Authenticated kullanıcı için rol menüsü
+          else ...[
+            PopupMenuButton<UserRole>(
+              icon: Icon(Icons.person_outline),
+              onSelected: (UserRole role) {
+                _userService.setCurrentUserRole(role);
+                setState(() {});
+              },
+              itemBuilder: (context) => UserRole.values.map((role) {
+                return PopupMenuItem(
+                  value: role,
+                  child: Row(
+                    children: [
+                      Icon(
+                        role.icon,
+                        color: role.color,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(role.displayName),
+                      if (currentUser?.role == role) ...[
+                        const Spacer(),
+                        Icon(Icons.check, color: role.color, size: 16),
+                      ],
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                await _userService.logout();
+                setState(() {});
+              },
+            ),
+          ],
           const SizedBox(width: 8),
         ],
       ),
@@ -212,6 +216,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchHeader() {
+    final isGuest = _userService.isGuest;
+    final currentUser = _userService.currentUser;
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -231,7 +238,9 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Firebase\'den Gerçek Veriler! 🔥',
+                      isGuest 
+                        ? 'Sağlık Hizmetlerini Keşfedin! 🏥' 
+                        : 'Hoşgeldin, ${currentUser?.name.split(' ').first}! 👋',
                       style: GoogleFonts.poppins(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -240,7 +249,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Tüm klinik ve tedavi verileri Firestore\'dan çekiliyor',
+                      isGuest 
+                        ? 'Fiyatları görün, klinikleri inceleyin, sonra giriş yapın'
+                        : 'Kişisel öneriler ve randevu alma hizmetinizde',
                       style: GoogleFonts.roboto(
                         fontSize: 16,
                         color: Colors.white70,
@@ -250,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Icon(
-                Icons.cloud_done,
+                isGuest ? Icons.explore : Icons.person_outline,
                 color: Colors.white,
                 size: 40,
               ),
@@ -272,7 +283,9 @@ class _HomePageState extends State<HomePage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Firebase\'den tedavi, klinik arayın...',
+                hintText: isGuest 
+                  ? 'Tedavi, klinik arayın (giriş yapmadan)'
+                  : 'Kişisel öneriler için arama yapın...',
                 prefixIcon: Icon(Icons.search, color: AppColors.primary),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
@@ -307,7 +320,18 @@ class _HomePageState extends State<HomePage> {
               icon: Icons.calendar_today,
               title: 'Randevu Al',
               color: AppColors.primary,
-              onTap: () {},
+              onTap: () {
+                AuthGuard.requireAuth(
+                  context,
+                  message: 'Randevu almak için giriş yapmanız gerekiyor',
+                  onAuthenticated: () {
+                    // Randevu alma sayfasına yönlendir
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Randevu sayfasına yönlendiriliyorsunuz...')),
+                    );
+                  },
+                );
+              },
             ),
           ),
           const SizedBox(width: 12),
@@ -325,7 +349,18 @@ class _HomePageState extends State<HomePage> {
               icon: Icons.local_offer,
               title: 'İndirimler',
               color: AppColors.accent,
-              onTap: () {},
+              onTap: () {
+                AuthGuard.requireAuth(
+                  context,
+                  message: 'Kişisel indirimler için giriş yapmanız gerekiyor',
+                  onAuthenticated: () {
+                    // İndirimler sayfasına yönlendir
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Kişisel indirimler sayfasına yönlendiriliyorsunuz...')),
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],

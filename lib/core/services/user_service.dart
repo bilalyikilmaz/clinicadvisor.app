@@ -8,11 +8,16 @@ class UserService {
   static final UserService _instance = UserService._internal();
   factory UserService() => _instance;
   UserService._internal() {
-    // Demo için başlangıçta hasta rolü ayarla
-    _currentUser = _mockUsers[3]; // Patient user
+    // Demo için başlangıçta guest kullanıcı
+    _currentUser = null; // Guest mode
   }
 
   UserModel? _currentUser;
+  
+  // Getter methods
+  UserModel? get currentUser => _currentUser;
+  bool get isAuthenticated => _currentUser != null;
+  bool get isGuest => _currentUser == null;
   
   // Mock kullanıcılar - Gerçek uygulamada Firebase'den gelecek
   final List<UserModel> _mockUsers = [
@@ -188,7 +193,6 @@ class UserService {
     ),
   ];
 
-  UserModel? get currentUser => _currentUser;
   List<ClinicModel> get clinics => _mockClinics;
   List<DoctorModel> get doctors => _mockDoctors;
   List<AppointmentModel> get appointments => _mockAppointments;
