@@ -43,10 +43,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // Gerçek Firebase Config - Firebase Console'dan alındı
+  // SECURITY: API Keys moved to environment variables
+  // Run: firebase projects:list to get your project details
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBQzX_5HK10W-H29ya6UfX4iASW-75H3Q4',
-    appId: '1:878295516341:web:72d945223b7d74760beafc', 
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
+    appId: String.fromEnvironment('FIREBASE_APP_ID', defaultValue: '1:878295516341:web:72d945223b7d74760beafc'),
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     authDomain: 'clinicadvisor-1a911.firebaseapp.com',
@@ -54,16 +55,16 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBozx_5HK10W-H29ya6UfX41ASW-75H3Q4',
-    appId: '1:878295516341:android:ANDROID_APP_ID_HERE',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
+    appId: String.fromEnvironment('FIREBASE_ANDROID_APP_ID', defaultValue: '1:878295516341:android:54e35d2def8607900beafc'),
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     storageBucket: 'clinicadvisor-1a911.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBozx_5HK10W-H29ya6UfX41ASW-75H3Q4',
-    appId: '1:878295516341:ios:IOS_APP_ID_HERE',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
+    appId: String.fromEnvironment('FIREBASE_IOS_APP_ID', defaultValue: '1:878295516341:ios:30669448789023820beafc'),
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     iosBundleId: 'com.clinicadvisor.clinicadvisorV2',
@@ -71,8 +72,8 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBozx_5HK10W-H29ya6UfX41ASW-75H3Q4',
-    appId: '1:878295516341:macos:MACOS_APP_ID_HERE',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
+    appId: String.fromEnvironment('FIREBASE_MACOS_APP_ID', defaultValue: '1:878295516341:macos:30669448789023820beafc'),
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     iosBundleId: 'com.clinicadvisor.clinicadvisorV2',
