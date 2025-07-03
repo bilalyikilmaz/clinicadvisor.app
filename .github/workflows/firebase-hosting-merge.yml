@@ -14,8 +14,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.32.5'
+          cache: true
+      - run: flutter clean
       - run: flutter pub get
-      - run: flutter build web
+      - run: flutter pub deps
+      - run: flutter build web --verbose
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

@@ -107,3 +107,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+dependency_overrides:
+  # Force specific intl version to avoid conflicts
+  intl: ^0.19.0
+  # Ensure compatibility with flutter_localizations
+  meta: ^1.16.0
