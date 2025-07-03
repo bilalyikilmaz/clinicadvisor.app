@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text('Firebase\'den veriler yükleniyor...'),
+            Text('Klinikler ve tedaviler yükleniyor...'),
           ],
         ),
       );
@@ -284,14 +284,14 @@ class _HomePageState extends State<HomePage> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: isGuest 
-                  ? 'Tedavi, klinik arayın (giriş yapmadan)'
+                  ? 'Tedavi, klinik arayın...'
                   : 'Kişisel öneriler için arama yapın...',
                 prefixIcon: Icon(Icons.search, color: AppColors.primary),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
               ),
               onSubmitted: (value) async {
-                // Firebase'den arama
+                // Arama yap
                 try {
                   final results = await _treatmentService.searchTreatments(value);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -337,10 +337,15 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(width: 12),
           Expanded(
             child: _buildQuickActionCard(
-              icon: Icons.cloud,
-              title: 'Firebase Verileri',
+              icon: Icons.search,
+              title: 'Klinik Ara',
               color: AppColors.secondary,
-              onTap: _initializeData,
+              onTap: () {
+                // Arama sayfasına yönlendir
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Arama sayfasına yönlendiriliyorsunuz...')),
+                );
+              },
             ),
           ),
           const SizedBox(width: 12),
