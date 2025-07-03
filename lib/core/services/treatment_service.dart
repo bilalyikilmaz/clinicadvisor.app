@@ -97,7 +97,7 @@ class TreatmentService {
     }
   }
 
-  Future<List<ClinicModel>> getPopularClinics(List<ClinicModel> allClinics) async {
+  Future<List<ClinicModel>> getPopularClinics() async {
     try {
       return await _firebaseService.getPopularClinics();
     } catch (e) {
@@ -169,9 +169,8 @@ class TreatmentService {
     return _treatments.where((t) => t.hasDiscount).toList();
   }
 
-  List<ClinicModel> getPopularClinicsSync(List<ClinicModel> allClinics) {
-    final sorted = List<ClinicModel>.from(allClinics);
-    sorted.sort((a, b) => b.rating.compareTo(a.rating));
-    return sorted.take(6).toList();
+  List<ClinicModel> getPopularClinicsSync() {
+    // Return empty list for sync version - use async version instead
+    return [];
   }
 } 

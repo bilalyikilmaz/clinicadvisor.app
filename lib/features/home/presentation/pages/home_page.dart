@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       final popularTreatments = await _treatmentService.getPopularTreatments();
       final trendingTreatments = await _treatmentService.getTrendingTreatments();
       final discountedTreatments = await _treatmentService.getDiscountedTreatments();
-      final popularClinics = await _treatmentService.getPopularClinics([]);
+      final popularClinics = await _treatmentService.getPopularClinics();
 
       setState(() {
         _categories = categories;
