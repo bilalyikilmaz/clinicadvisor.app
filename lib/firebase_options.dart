@@ -45,8 +45,8 @@ class DefaultFirebaseOptions {
 
   // Gerçek Firebase Config - Firebase Console'dan alındı
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBozx_5HK10W-H29ya6UfX41ASW-75H3Q4',
-    appId: '1:878295516341:web:72d945223b7d74760beafe', 
+    apiKey: 'AIzaSyBQzX_5HK10W-H29ya6UfX4iASW-75H3Q4',
+    appId: '1:878295516341:web:72d945223b7d74760beafc', 
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     authDomain: 'clinicadvisor-1a911.firebaseapp.com',
