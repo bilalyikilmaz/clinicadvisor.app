@@ -23,9 +23,6 @@ jobs:
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
-          FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
-          FIREBASE_MACOS_APP_ID: ${{ secrets.FIREBASE_MACOS_APP_ID }}
           
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

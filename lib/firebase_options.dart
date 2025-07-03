@@ -19,64 +19,21 @@ class DefaultFirebaseOptions {
     if (kIsWeb) {
       return web;
     }
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
-        return ios;
-      case TargetPlatform.macOS:
-        return macos;
-      case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      default:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions are not supported for this platform.',
-        );
-    }
+    // Mobile platforms not configured - WEB ONLY app
+    throw UnsupportedError(
+      'DefaultFirebaseOptions are configured for WEB ONLY. '
+      'This is a web-first application.',
+    );
   }
 
-  // SECURITY: API Keys moved to environment variables
-  // Run: firebase projects:list to get your project details
+  // WEB-ONLY Configuration
+  // SECURITY: API Key moved to environment variable
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
-    appId: String.fromEnvironment('FIREBASE_APP_ID', defaultValue: '1:878295516341:web:72d945223b7d74760beafc'),
+    appId: String.fromEnvironment('FIREBASE_APP_ID', defaultValue: 'your-app-id-here'),
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     authDomain: 'clinicadvisor-1a911.firebaseapp.com',
-    storageBucket: 'clinicadvisor-1a911.firebasestorage.app',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
-    appId: String.fromEnvironment('FIREBASE_ANDROID_APP_ID', defaultValue: '1:878295516341:android:54e35d2def8607900beafc'),
-    messagingSenderId: '878295516341',
-    projectId: 'clinicadvisor-1a911',
-    storageBucket: 'clinicadvisor-1a911.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
-    appId: String.fromEnvironment('FIREBASE_IOS_APP_ID', defaultValue: '1:878295516341:ios:30669448789023820beafc'),
-    messagingSenderId: '878295516341',
-    projectId: 'clinicadvisor-1a911',
-    iosBundleId: 'com.clinicadvisor.clinicadvisorV2',
-    storageBucket: 'clinicadvisor-1a911.firebasestorage.app',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
-    appId: String.fromEnvironment('FIREBASE_MACOS_APP_ID', defaultValue: '1:878295516341:macos:30669448789023820beafc'),
-    messagingSenderId: '878295516341',
-    projectId: 'clinicadvisor-1a911',
-    iosBundleId: 'com.clinicadvisor.clinicadvisorV2',
     storageBucket: 'clinicadvisor-1a911.firebasestorage.app',
   );
 } 
