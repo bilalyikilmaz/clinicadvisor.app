@@ -27,10 +27,10 @@ class DefaultFirebaseOptions {
   }
 
   // WEB-ONLY Configuration
-  // SECURITY: API Key moved to environment variable
+  // TEMPORARY: Hardcoded values for testing - WILL BE SECURED LATER
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'your-api-key-here'),
-    appId: String.fromEnvironment('FIREBASE_APP_ID', defaultValue: 'your-app-id-here'),
+    apiKey: 'AIzaSyBbNIrijtZeq3uvlqOU522l3nzs6_uV4',
+    appId: '1:878295516341:web:f267412e0c35aaf80beafc',
     messagingSenderId: '878295516341',
     projectId: 'clinicadvisor-1a911',
     authDomain: 'clinicadvisor-1a911.firebaseapp.com',
